@@ -1,0 +1,11 @@
+{
+	"name": "bot6.0",
+	"description": "Hello World ExpressJS WebService",
+	"version": "0.0.1",
+	"private": true,
+	"dependencies": {
+		"aws-lambda": "^1.0.7",
+		"aws-serverless-express": "3.1.3",
+		"express": "4.16.2"
+	}
+}

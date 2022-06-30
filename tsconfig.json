@@ -3,9 +3,9 @@
 	"compilerOptions": {
 		"sourceMap": true,
 		"moduleResolution": "node",
-		"outDir": "./dist",
-		"rootDir": "./src"
+		"outDir": "app/dist",
+		"rootDir": "app/src"
 	},
 	"esModuleInterop": true,
-	"include": ["src/**/*.ts", "src/**/*.js"]
+	"include": ["app/src/**/*.ts", "app/src/**/*.js"]
 }
