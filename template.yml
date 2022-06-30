@@ -69,8 +69,6 @@ Resources:
 
   DependencyLayer:
     Type: AWS::Serverless::LayerVersion
-    # Metadata:
-    #   BuildMethod: makefile
     Properties:
       LayerName: !Sub 'CodeStar-${ProjectId}-Depenedencies${Stage}'
       Description: Root dependencies

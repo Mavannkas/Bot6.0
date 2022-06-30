@@ -1,6 +1,5 @@
 {
 	"name": "bot6.0",
-	"description": "Hello World ExpressJS WebService",
 	"version": "0.0.1",
 	"private": true,
 	"dependencies": {
