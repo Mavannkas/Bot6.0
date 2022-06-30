@@ -62,10 +62,6 @@ Resources:
             Principal:
               Service: [lambda.amazonaws.com]
             Action: sts:AssumeRole
-          - Effect: Allow
-            Principal:
-              service:
-            Action:
       Path: /
       ManagedPolicyArns:
         - !Sub 'arn:${AWS::Partition}:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole'
@@ -78,7 +74,6 @@ Resources:
     Properties:
       LayerName: !Sub 'CodeStar-${ProjectId}-Depenedencies${Stage}'
       Description: Root dependencies
-
       ContentUri: dependencies/
       CompatibleRuntimes:
         - nodejs14.x
