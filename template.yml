@@ -31,13 +31,13 @@ Globals:
 Resources:
   MainApi:
     Type: AWS::Serverless::Api
-  Properties:
-    StageName: !Ref Stage
-    Cors: "'*'"
-    Auth:
-      DefaultAuthorizer: CognitoAuthorizer
-      Authorizers:
-        CognitoAuthorizer: !GetAtt CognitoUserPool.Arn
+    Properties:
+      StageName: !Ref Stage
+      Cors: "'*'"
+      Auth:
+        DefaultAuthorizer: CognitoAuthorizer
+        Authorizers:
+          CognitoAuthorizer: !GetAtt CognitoUserPool.Arn
 
   HelloWorld:
     Type: AWS::Serverless::Function
@@ -56,15 +56,13 @@ Resources:
           Properties:
             Path: /
             Method: get
-          RestApiId:
-            Ref: MainApi
+          RestApiId: !Ref MainApi
         PostEvent:
           Type: Api
           Properties:
             Path: /
             Method: post
-            RestApiId:
-              Ref: MainApi
+            RestApiId: !Ref MainApi
   CognitoUserPool:
     Type: AWS::Cognito::UserPool
     Properties:
@@ -81,10 +79,8 @@ Resources:
       Schema:
         - AttributeDataType: String
           Name: email
-          required: true
         - AttributeDataType: String
           Name: userID
-          required: true
 
   CognitoUserPoolClient:
     Type: AWS::Cognito::UserPoolClient
@@ -94,10 +90,10 @@ Resources:
       GenerateSecret: true
       AccessTokenValidity: 30
       RefreshTokenValidity: 30
-      TokenValidityUnits: days
+      TokenValidityUnits:
+        AccessToken: days
 
   LambdaExecutionRole:
-    Description: Creating service role in IAM for AWS Lambda
     Type: AWS::IAM::Role
     Properties:
       RoleName: !Sub 'CodeStar-${ProjectId}-Execution${Stage}'
