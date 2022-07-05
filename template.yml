@@ -75,4 +75,4 @@ Resources:
       ContentUri: dependencies/
       CompatibleRuntimes:
         - nodejs14.x
-      RetentionPolicy: Retain
+      RetentionPolicy: Delete
