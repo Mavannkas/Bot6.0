@@ -29,6 +29,16 @@ Globals:
         NODE_ENV: !Ref Stage
 
 Resources:
+  MainApi:
+    Type: AWS::Serverless::Api
+  Properties:
+    StageName: !Ref Stage
+    Cors: "'*'"
+    Auth:
+      DefaultAuthorizer: CognitoAuthorizer
+      Authorizers:
+        CognitoAuthorizer: !GetAtt CognitoUserPool.Arn
+
   HelloWorld:
     Type: AWS::Serverless::Function
     Properties:
@@ -46,11 +56,46 @@ Resources:
           Properties:
             Path: /
             Method: get
+          RestApiId:
+            Ref: MainApi
         PostEvent:
           Type: Api
           Properties:
             Path: /
             Method: post
+            RestApiId:
+              Ref: MainApi
+  CognitoUserPool:
+    Type: AWS::Cognito::UserPool
+    Properties:
+      UserPoolName: !Sub 'CodeStar-${ProjectId}-UserPool${Stage}'
+      Policies:
+        PasswordPolicy:
+          MinimumLength: 8
+          RequireLowercase: true
+          RequireNumbers: true
+          RequireSymbols: true
+          RequireUppercase: true
+      UsernameAttributes:
+        - email
+      Schema:
+        - AttributeDataType: String
+          Name: email
+          required: true
+        - AttributeDataType: String
+          Name: userID
+          required: true
+
+  CognitoUserPoolClient:
+    Type: AWS::Cognito::UserPoolClient
+    Properties:
+      UserPoolId: !Ref CognitoUserPool
+      ClientName: !Sub 'CodeStar-${ProjectId}-CognitoClient${Stage}'
+      GenerateSecret: true
+      AccessTokenValidity: 30
+      RefreshTokenValidity: 30
+      TokenValidityUnits: days
+
   LambdaExecutionRole:
     Description: Creating service role in IAM for AWS Lambda
     Type: AWS::IAM::Role
@@ -66,7 +111,6 @@ Resources:
       ManagedPolicyArns:
         - !Sub 'arn:${AWS::Partition}:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole'
       PermissionsBoundary: !Sub 'arn:${AWS::Partition}:iam::${AWS::AccountId}:policy/CodeStar_${ProjectId}_PermissionsBoundary'
-
   DependencyLayer:
     Type: AWS::Serverless::LayerVersion
     Properties:
