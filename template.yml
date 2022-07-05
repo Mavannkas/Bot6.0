@@ -37,7 +37,8 @@ Resources:
       Auth:
         DefaultAuthorizer: CognitoAuthorizer
         Authorizers:
-          CognitoAuthorizer: !GetAtt CognitoUserPool.Arn
+          CognitoAuthorizer:
+            UserPoolArn: !GetAtt CognitoUserPool.Arn
 
   HelloWorld:
     Type: AWS::Serverless::Function

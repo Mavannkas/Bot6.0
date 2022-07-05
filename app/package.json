@@ -22,7 +22,7 @@
 		"test": "mocha --recursive tests",
 		"build": "npx tsc",
 		"watch": "tsc -w --preserveWatchOutput",
-		"sam": "sam local start-api --warm-containers LAZY",
+		"sam": "sam local start-api --template ../template.yml --warm-containers LAZY",
 		"dev": "concurrently --kill-others \"npm run sam\" \"npm run watch\""
 	}
 }
