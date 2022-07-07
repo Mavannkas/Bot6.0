@@ -89,10 +89,8 @@ Resources:
       UserPoolId: !Ref CognitoUserPool
       ClientName: !Sub 'CodeStar-${ProjectId}-CognitoClient${Stage}'
       GenerateSecret: true
-      AccessTokenValidity: 30
+      AccessTokenValidity: 12
       RefreshTokenValidity: 30
-      TokenValidityUnits:
-        AccessToken: days
 
   LambdaExecutionRole:
     Type: AWS::IAM::Role
