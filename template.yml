@@ -110,10 +110,6 @@ Resources:
         - aws.cognito.signin.user.admin
       SupportedIdentityProviders:
         - COGNITO
-        - Google
-        - Facebook
-        - SignInWithApple
-        - LoginWithAmazon
       AllowedOAuthFlowsUserPoolClient: true
       CallbackURLs:
         - https://google.com
