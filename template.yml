@@ -82,6 +82,8 @@ Resources:
           Name: email
         - AttributeDataType: String
           Name: userID
+      EmailConfiguration:
+        EmailSendingAccount: COGNITO_DEFAULT
 
   CognitoUserPoolClient:
     Type: AWS::Cognito::UserPoolClient
@@ -91,6 +93,20 @@ Resources:
       GenerateSecret: true
       AccessTokenValidity: 12
       RefreshTokenValidity: 30
+      AllowedOAuthFlows:
+        - code
+        - implicit
+        - client_credentials
+      AllowedOAuthFlowsUserPoolClient: true
+      CallbackURLs:
+        - https://google.com
+      DefaultRedirectURI: https://google.com
+
+  CognitoUserPoolDomain:
+    Type: AWS::Cognito::UserPoolDomain
+    Properties:
+      Domain: !Sub Bot6-0-${Stage}
+      UserPoolId: !Ref CognitoUserPool
 
   LambdaExecutionRole:
     Type: AWS::IAM::Role
