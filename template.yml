@@ -68,6 +68,13 @@ Resources:
     Type: AWS::Cognito::UserPool
     Properties:
       UserPoolName: !Sub 'CodeStar-${ProjectId}-UserPool${Stage}'
+      EnabledMfas:
+        - SOFTWARE_TOKEN_MFA
+      MfaConfiguration: OPTIONAL
+      AccountRecoverySetting:
+        RecoveryMechanisms:
+          - Name: verified_email
+
       Policies:
         PasswordPolicy:
           MinimumLength: 8
@@ -95,8 +102,11 @@ Resources:
       RefreshTokenValidity: 30
       AllowedOAuthFlows:
         - code
-        - implicit
-        - client_credentials
+      AllowedOAuthScopes:
+        - email
+        - openid
+        - profile
+        - aws.cognito.signin.user.admin
       AllowedOAuthFlowsUserPoolClient: true
       CallbackURLs:
         - https://google.com
