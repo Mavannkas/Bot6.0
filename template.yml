@@ -116,7 +116,7 @@ Resources:
   CognitoUserPoolDomain:
     Type: AWS::Cognito::UserPoolDomain
     Properties:
-      Domain: !Sub Bot6-0-${Stage}
+      Domain: !Sub bot6-0-${Stage}
       UserPoolId: !Ref CognitoUserPool
 
   LambdaExecutionRole:
