@@ -74,6 +74,7 @@ Resources:
       AccountRecoverySetting:
         RecoveryMechanisms:
           - Name: verified_email
+            Priority: 1
 
       Policies:
         PasswordPolicy:
