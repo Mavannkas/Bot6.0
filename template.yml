@@ -39,6 +39,7 @@ Resources:
         Authorizers:
           CognitoAuthorizer:
             UserPoolArn: !GetAtt CognitoUserPool.Arn
+            AuthType: 'COGNITO_USER_POOLS'
 
   HelloWorld:
     Type: AWS::Serverless::Function
