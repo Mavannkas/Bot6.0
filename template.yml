@@ -27,6 +27,7 @@ Globals:
     Environment:
       Variables:
         NODE_ENV: !Ref Stage
+    Runtime: nodejs14.x
 
 Resources:
   MainApi:
@@ -49,7 +50,6 @@ Resources:
       FunctionName: !Sub 'awscodestar-${ProjectId}-lambda-HelloWorld'
       CodeUri: app/dist
       Handler: index.handler
-      Runtime: nodejs14.x
       Role:
         Fn::GetAtt:
           - LambdaExecutionRole
@@ -58,15 +58,31 @@ Resources:
         GetEvent:
           Type: Api
           Properties:
-            Path: /
+            Path: /token
             Method: get
             RestApiId: !Ref MainApi
-        PostEvent:
+
+  GetAuthToken:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub 'awscodestar-${ProjectId}-lambda-auth'
+      CodeUri: app/dist/auth
+      Handler: verify.handler
+      Role:
+        Fn::GetAtt:
+          - LambdaExecutionRole
+          - Arn
+      Events:
+        GetEvent:
           Type: Api
           Properties:
-            Path: /
-            Method: post
+            Path: /token
+            RequestParameters:
+              - method.request.querystring.code:
+                Required: true
+            Method: get
             RestApiId: !Ref MainApi
+
   CognitoUserPool:
     Type: AWS::Cognito::UserPool
     Properties:
