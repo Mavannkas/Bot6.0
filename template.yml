@@ -36,8 +36,8 @@ Resources:
       Cors: "'*'"
       Auth:
         Authorizers:
-          CognitoAuthorizer:
-            MyCognitoAuthorizer: !GetAtt CognitoUserPool.Arn
+          MyCognitoAuthorizer:
+            UserPoolArn: !GetAtt CognitoUserPool.Arn
             # Identity:
             #   Header: token
             # AuthType: 'COGNITO_USER_POOLS'
