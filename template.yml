@@ -79,8 +79,8 @@ Resources:
             Path: /token
             RequestParameters:
               - method.request.querystring.code:
-                Required: true
-                Caching: false
+                  Required: true
+                  Caching: false
             Auth:
               Authorizer: NONE
             Method: get
