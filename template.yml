@@ -58,7 +58,7 @@ Resources:
         GetEvent:
           Type: Api
           Properties:
-            Path: /token
+            Path: /
             Method: get
             RestApiId: !Ref MainApi
 
