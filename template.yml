@@ -35,13 +35,13 @@ Resources:
       StageName: !Ref Stage
       Cors: "'*'"
       Auth:
-        DefaultAuthorizer: CognitoAuthorizer
         Authorizers:
           CognitoAuthorizer:
             UserPoolArn: !GetAtt CognitoUserPool.Arn
             Identity:
               Header: token
             AuthType: 'COGNITO_USER_POOLS'
+        DefaultAuthorizer: CognitoAuthorizer
 
   HelloWorld:
     Type: AWS::Serverless::Function
