@@ -39,6 +39,8 @@ Resources:
         Authorizers:
           CognitoAuthorizer:
             UserPoolArn: !GetAtt CognitoUserPool.Arn
+            Identity:
+              Header: token
             AuthType: 'COGNITO_USER_POOLS'
 
   HelloWorld:
