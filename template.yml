@@ -37,11 +37,11 @@ Resources:
       Auth:
         Authorizers:
           CognitoAuthorizer:
-            UserPoolArn: !GetAtt CognitoUserPool.Arn
-            Identity:
-              Header: token
-            AuthType: 'COGNITO_USER_POOLS'
-        DefaultAuthorizer: CognitoAuthorizer
+            MyCognitoAuthorizer: !GetAtt CognitoUserPool.Arn
+            # Identity:
+            #   Header: token
+            # AuthType: 'COGNITO_USER_POOLS'
+        DefaultAuthorizer: MyCognitoAuthorizer
 
   HelloWorld:
     Type: AWS::Serverless::Function
@@ -60,7 +60,7 @@ Resources:
           Properties:
             Path: /
             Method: get
-          RestApiId: !Ref MainApi
+            RestApiId: !Ref MainApi
         PostEvent:
           Type: Api
           Properties:
