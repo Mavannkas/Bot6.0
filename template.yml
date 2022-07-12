@@ -80,6 +80,9 @@ Resources:
             RequestParameters:
               - method.request.querystring.code:
                 Required: true
+                Caching: false
+            Auth:
+              Authorizer: NONE
             Method: get
             RestApiId: !Ref MainApi
 
