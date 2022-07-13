@@ -26,9 +26,12 @@ export class FormatResponse {
 	async build(): Promise<APIGatewayProxyResult> {
 		const result: APIGatewayProxyResult = {
 			statusCode: this.statusCode,
+			headers: {
+				contentType: 'application/json',
+			},
 			body: JSON.stringify(this.body),
 		};
-
+		console.log(JSON.stringify(result));
 		return result;
 	}
 

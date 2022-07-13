@@ -1,11 +1,12 @@
 import { Handler } from '../interfaces/default-handler';
 import { FormatResponse } from '../response/format-response';
+import { authorizationRequest } from './axios-requests';
+export const verifyAuthCode: Handler = async event => {
+	const { code } = event.queryStringParameters ?? {};
+	const response = await authorizationRequest(code, process.env.cognitoUrl, {
+		clientID: process.env.cognitoClientID,
+		secret: process.env.cognitoClientSecret,
+	});
 
-export const handler: Handler = async (event, context) => {
-	return FormatResponse.start()
-		.code(200)
-		.json({
-			test: 'test',
-		})
-		.build();
+	return FormatResponse.start().code(200).json(response.data).build();
 };
