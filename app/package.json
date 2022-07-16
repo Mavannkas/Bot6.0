@@ -22,7 +22,7 @@
 	},
 	"scripts": {
 		"test": "mocha --recursive tests",
-		"build": "npx tsc",
+		"build": "npx -p typescript tsc",
 		"watch": "tsc -w --preserveWatchOutput",
 		"sam": "sam local start-api --template ../template.yml --warm-containers LAZY",
 		"dev": "concurrently --kill-others \"npm run sam\" \"npm run watch\""
