@@ -182,7 +182,7 @@ Resources:
             Action:
               - ssm:PutParameter
               - ssm:AddTagsToResource
-            Resource: !Sub /cognito/${ProjectId}${Stage}/client/*
+            Resource: !Sub arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/cognito/${ProjectId}${Stage}/client/*
 
   DependencyLayer:
     Type: AWS::Serverless::LayerVersion
