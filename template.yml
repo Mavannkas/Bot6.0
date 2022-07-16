@@ -28,6 +28,7 @@ Globals:
       Variables:
         NODE_ENV: !Ref Stage
     Runtime: nodejs14.x
+    CodeUri: app/dist
 
 Resources:
   MainApi:
@@ -48,7 +49,6 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       FunctionName: !Sub 'awscodestar-${ProjectId}-lambda-HelloWorld'
-      CodeUri: app/dist
       Handler: index.handler
       Role:
         Fn::GetAtt:
@@ -66,12 +66,18 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       FunctionName: !Sub 'awscodestar-${ProjectId}-lambda-auth'
-      CodeUri: app/dist/auth
-      Handler: verify.handler
+      Handler: handlers/verify-auth-code.handler
+      Environment:
+        Variables:
+          cognitoClientID: !Sub /cognito/${ProjectId}${Stage}/client/id
+          cognitoClientSecret: !Sub /cognito/${ProjectId}${Stage}/client/secret
+          cognitoUrl: !Sub bot6-0-${Stage}.auth.${AWS::Region}.amazoncognito.com
       Role:
         Fn::GetAtt:
           - LambdaExecutionRole
           - Arn
+      Policies: !Ref SSMParameterManagedPolicy
+      Timeout: 30
       Events:
         GetEvent:
           Type: Api
@@ -137,6 +143,13 @@ Resources:
         - https://google.com
       DefaultRedirectURI: https://google.com
 
+  CognitoUserPoolClientIDParameter:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Name: !Sub /cognito/${ProjectId}${Stage}/client/id
+      Type: String
+      Value: !Ref CognitoUserPool
+
   CognitoUserPoolDomain:
     Type: AWS::Cognito::UserPoolDomain
     Properties:
@@ -157,6 +170,20 @@ Resources:
       ManagedPolicyArns:
         - !Sub 'arn:${AWS::Partition}:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole'
       PermissionsBoundary: !Sub 'arn:${AWS::Partition}:iam::${AWS::AccountId}:policy/CodeStar_${ProjectId}_PermissionsBoundary'
+
+  SSMParameterManagedPolicy:
+    Type: AWS::IAM::ManagedPolicy
+    Properties:
+      ManagedPolicyName: !Sub SSM_ACCESS_${ProjectId}${Stage}
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Action:
+              - ssm:PutParameter
+              - ssm:AddTagsToResource
+            Resource: !Sub /cognito/${ProjectId}${Stage}/client/*
+
   DependencyLayer:
     Type: AWS::Serverless::LayerVersion
     Properties:
