@@ -182,8 +182,7 @@ Resources:
         Statement:
           - Effect: Allow
             Action:
-              - ssm:PutParameter
-              - ssm:AddTagsToResource
+              - ssm:GetParameter
             Resource: !Sub arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/cognito/${ProjectId}${Stage}/client/*
 
   DependencyLayer:
