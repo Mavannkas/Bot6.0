@@ -78,7 +78,8 @@ Resources:
         Fn::GetAtt:
           - LambdaExecutionRole
           - Arn
-      Policies: !Sub SSM_ACCESS_${ProjectId}${Stage}
+      Policies:
+        - !Sub SSM_ACCESS_${ProjectId}${Stage}
       Timeout: 30
       Events:
         GetEvent:
