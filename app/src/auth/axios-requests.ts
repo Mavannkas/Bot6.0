@@ -24,10 +24,12 @@ export const authorizationRequest = async (
 			redirect_uri: 'https://google.com/',
 		}),
 	};
+	console.log(JSON.stringify(params));
 
 	try {
 		return await axios.request(body);
 	} catch (err) {
+		console.error(err?.response?.data);
 		if (err?.response?.data?.error) {
 			throw new ReponseError(401, {
 				message: 'Invalid code',

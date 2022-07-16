@@ -9,7 +9,7 @@ export class FormatResponse {
 		this.init();
 	}
 
-	static start(): FormatResponse {
+	static create(): FormatResponse {
 		return new FormatResponse();
 	}
 
