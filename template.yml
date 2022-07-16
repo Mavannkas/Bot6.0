@@ -49,6 +49,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       FunctionName: !Sub 'awscodestar-${ProjectId}-lambda-HelloWorld'
+      CodeUri: app/dist
       Handler: index.handler
       Role:
         Fn::GetAtt:
@@ -66,6 +67,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       FunctionName: !Sub 'awscodestar-${ProjectId}-lambda-auth'
+      CodeUri: app/dist
       Handler: handlers/verify-auth-code.handler
       Environment:
         Variables:
