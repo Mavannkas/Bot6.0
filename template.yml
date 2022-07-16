@@ -69,9 +69,9 @@ Resources:
       Handler: handlers/verify-auth-code.handler
       Environment:
         Variables:
-          cognitoClientID: !Sub /cognito/${ProjectId}${Stage}/client/id
-          cognitoClientSecret: !Sub /cognito/${ProjectId}${Stage}/client/secret
-          cognitoUrl: !Sub bot6-0-${Stage}.auth.${AWS::Region}.amazoncognito.com
+          CognitoClientIDPath: !Sub /cognito/${ProjectId}${Stage}/client/id
+          CognitoClientSecretPath: !Sub /cognito/${ProjectId}${Stage}/client/secret
+          CognitoUrl: !Sub bot6-0-${Stage}.auth.${AWS::Region}.amazoncognito.com
       Role:
         Fn::GetAtt:
           - LambdaExecutionRole
