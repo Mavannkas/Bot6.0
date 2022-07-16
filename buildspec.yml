@@ -18,7 +18,9 @@ phases:
   build:
     commands:
       - cd ../../app
+      - npm install
       - npm run build
+      - rm -rf node_modules/
       - cd ..
       # Use AWS SAM to package the application using AWS CloudFormation
       - aws cloudformation package --template template.yml --s3-bucket $S3_BUCKET --output-template template-export.yml
