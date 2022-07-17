@@ -1,4 +1,5 @@
 import { GetParameterCommand, SSMClient } from '@aws-sdk/client-ssm';
+import { ReponseError } from '../response/lambda-error';
 
 export class SsmClient {
 	private client: SSMClient;
@@ -18,8 +19,13 @@ export class SsmClient {
 	private async sendCommand(command: GetParameterCommand): Promise<string> {
 		try {
 			const commandOutput = await this.client.send(command);
+
+			if (!commandOutput?.Parameter?.Value) {
+				throw new ReponseError(500, `Parameter ${command.input.Name} not found`);
+			}
+
 			return commandOutput?.Parameter?.Value;
-		} catch (err) {
+		} catch (err: any) {
 			console.log(err);
 			console.error('sendCommand ' + err.message);
 			throw err;

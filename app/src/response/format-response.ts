@@ -1,9 +1,10 @@
 import { APIGatewayProxyResult } from 'aws-lambda';
 import { Response } from '../interfaces/standard-object';
+import { InvalidParameterError } from './argument-error';
 
 export class FormatResponse {
-	private statusCode: number;
-	private body: Response;
+	private statusCode!: number;
+	private body!: Response;
 
 	constructor() {
 		this.init();
@@ -14,6 +15,10 @@ export class FormatResponse {
 	}
 
 	code(statusCode: number): FormatResponse {
+		if (statusCode < 100 || statusCode > 599) {
+			throw new InvalidParameterError('Status code must be between 100 and 599');
+		}
+
 		this.statusCode = statusCode;
 		return this;
 	}
@@ -36,7 +41,7 @@ export class FormatResponse {
 	}
 
 	private init() {
-		this.body = undefined;
-		this.statusCode = undefined;
+		this.body = {};
+		this.statusCode = 500;
 	}
 }

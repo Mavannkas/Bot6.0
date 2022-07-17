@@ -1,24 +1,27 @@
 import { Handler } from '../interfaces/default-handler';
+import { Deps } from '../interfaces/deps';
 import { FormatResponse } from '../response/format-response';
 import { SsmClient } from '../ssm-client/ssm';
 import { CognitoCredentials } from './auth-interfaces/credits-interface';
 import { authorizationRequest, AuthRequest, refreshRequest } from './axios-requests';
 import { AuthDeps } from './deps';
 
-const SSM_CLIENT_ID_PATH = process.env.CognitoClientIDPath;
-const SSM_CLIENT_SECRET_PATH = process.env.CognitoClientSecretPath;
-const COGNITO_URL = process.env.CognitoUrl;
+const SSM_CLIENT_ID_PATH = process.env.CognitoClientIDPath ?? '';
+const SSM_CLIENT_SECRET_PATH = process.env.CognitoClientSecretPath ?? '';
+const COGNITO_URL = process.env.CognitoUrl ?? '';
 
-export const getAuthToken: Handler = (deps: AuthDeps) => async event => {
+export const getAuthToken: Handler = (deps: Deps) => async event => {
+	const innerDeps = deps as AuthDeps;
 	const { code } = event.queryStringParameters ?? {};
 
-	return await getCognitoRespose(deps, code, authorizationRequest);
+	return await getCognitoRespose(innerDeps, code ?? '', authorizationRequest);
 };
 
-export const getRefreshToken: Handler = (deps: AuthDeps) => async event => {
+export const getRefreshToken: Handler = (deps: Deps) => async event => {
+	const innerDeps = deps as AuthDeps;
 	const { refresh_token: code } = event.queryStringParameters ?? {};
 
-	return await getCognitoRespose(deps, code, refreshRequest);
+	return await getCognitoRespose(innerDeps, code ?? '', refreshRequest);
 };
 
 const getCognitoRespose = async (deps: AuthDeps, code: string, callback: AuthRequest) => {

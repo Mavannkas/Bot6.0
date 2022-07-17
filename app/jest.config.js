@@ -1,0 +1,7 @@
+module.exports = {
+	preset: 'ts-jest',
+	coverageDirectory: './coverage',
+	testMatch: ['**/?(*.)+(spec).ts'],
+	resetMocks: true,
+	clearMocks: true,
+};

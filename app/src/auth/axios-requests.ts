@@ -26,7 +26,7 @@ export const refreshRequest: AuthRequest = async (
 const sendRequest = async (body: AxiosRequestConfig): Promise<AxiosResponse> => {
 	try {
 		return await axios.request(body);
-	} catch (err) {
+	} catch (err: any) {
 		console.log(JSON.stringify(body));
 		console.error(err?.response?.data);
 		if (err?.response?.data?.error === 'invalid_grant') {

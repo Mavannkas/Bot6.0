@@ -29,7 +29,7 @@ Globals:
         NODE_ENV: !Ref Stage
         AWS_REGION: !Sub ${AWS::Region}
     Runtime: nodejs14.x
-    CodeUri: app/dist
+    CodeUri: app/dist/src
 
 Resources:
   MainApi:
@@ -50,7 +50,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       FunctionName: !Sub 'awscodestar-${ProjectId}-lambda-HelloWorld'
-      CodeUri: app/dist
+      CodeUri: app/dist/src
       Handler: index.handler
       Role:
         Fn::GetAtt:
@@ -68,7 +68,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       FunctionName: !Sub 'awscodestar-${ProjectId}-lambda-auth'
-      CodeUri: app/dist
+      CodeUri: app/dist/src
       Handler: handlers/verify-auth-code.handler
       Environment:
         Variables:
@@ -98,7 +98,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       FunctionName: !Sub 'awscodestar-${ProjectId}-lambda-refresh-auth'
-      CodeUri: app/dist
+      CodeUri: app/dist/src
       Handler: handlers/refresh-token-code.handler
       Environment:
         Variables:

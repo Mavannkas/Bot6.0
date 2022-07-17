@@ -14,11 +14,11 @@ export const basicHandler =
 		}
 	};
 
-const getErrorCode = (err): number => err?.response?.status ?? err.code ?? 500;
+const getErrorCode = (err: any): number => err?.response?.status ?? err.code ?? 500;
 
-const getErrorBody = (err): Response => err?.json ?? err?.response?.data;
+const getErrorBody = (err: any): Response => err?.json ?? err?.response?.data;
 
-const processError = (err): Promise<APIGatewayProxyResult> => {
+const processError = (err: any): Promise<APIGatewayProxyResult> => {
 	const code = getErrorCode(err);
 	const body = getErrorBody(err);
 	console.error(err.message);
