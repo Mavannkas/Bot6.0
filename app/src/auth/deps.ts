@@ -7,7 +7,7 @@ export interface AuthDeps extends Deps {
 	};
 }
 
-export const resolveDeps = (): AuthDeps => {
+export const resolveAuthDeps = (): AuthDeps => {
 	return {
 		awsServices: {
 			ssmClient: new SSMClient({

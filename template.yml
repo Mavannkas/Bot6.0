@@ -27,6 +27,7 @@ Globals:
     Environment:
       Variables:
         NODE_ENV: !Ref Stage
+        AWS_REGION: !Sub ${AWS::Region}
     Runtime: nodejs14.x
     CodeUri: app/dist
 
@@ -83,9 +84,39 @@ Resources:
         GetEvent:
           Type: Api
           Properties:
-            Path: /token
+            Path: /auth/verify
             RequestParameters:
               - method.request.querystring.code:
+                  Required: true
+                  Caching: false
+            Auth:
+              Authorizer: NONE
+            Method: get
+            RestApiId: !Ref MainApi
+
+  RefreshToken:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub 'awscodestar-${ProjectId}-lambda-refresh-auth'
+      CodeUri: app/dist
+      Handler: handlers/refresh-token-code.handler
+      Environment:
+        Variables:
+          CognitoClientIDPath: !Sub /cognito/${ProjectId}${Stage}/client/id
+          CognitoClientSecretPath: !Sub /cognito/${ProjectId}${Stage}/client/secret
+          CognitoUrl: !Sub bot6-0-${Stage}.auth.${AWS::Region}.amazoncognito.com
+      Role:
+        Fn::GetAtt:
+          - LambdaExecutionRole
+          - Arn
+      Timeout: 30
+      Events:
+        GetEvent:
+          Type: Api
+          Properties:
+            Path: /auth/refresh
+            RequestParameters:
+              - method.request.querystring.refresh_token:
                   Required: true
                   Caching: false
             Auth:

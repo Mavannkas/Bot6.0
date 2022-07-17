@@ -14,7 +14,7 @@ export const basicHandler =
 		}
 	};
 
-const getErrorCode = (err): number => err?.response?.status ?? err.code ?? 400;
+const getErrorCode = (err): number => err?.response?.status ?? err.code ?? 500;
 
 const getErrorBody = (err): Response => err?.json ?? err?.response?.data;
 
