@@ -24,7 +24,7 @@ export class SsmClient {
 				throw new ReponseError(500, `Parameter ${command.input.Name} not found`);
 			}
 
-			return commandOutput?.Parameter?.Value;
+			return commandOutput.Parameter.Value;
 		} catch (err: any) {
 			console.log(err);
 			console.error('sendCommand ' + err.message);

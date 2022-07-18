@@ -24,7 +24,7 @@ export const getRefreshToken: Handler = (deps: Deps) => async event => {
 	return await getCognitoRespose(innerDeps, code ?? '', refreshRequest);
 };
 
-const getCognitoRespose = async (deps: AuthDeps, code: string, callback: AuthRequest) => {
+export const getCognitoRespose = async (deps: AuthDeps, code: string, callback: AuthRequest) => {
 	const ssmClient = new SsmClient(deps.awsServices.ssmClient);
 	console.log(SSM_CLIENT_ID_PATH);
 	console.log(SSM_CLIENT_SECRET_PATH);

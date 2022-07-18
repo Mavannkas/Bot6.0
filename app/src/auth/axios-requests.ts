@@ -23,7 +23,7 @@ export const refreshRequest: AuthRequest = async (
 	return sendRequest(body);
 };
 
-const sendRequest = async (body: AxiosRequestConfig): Promise<AxiosResponse> => {
+export const sendRequest = async (body: AxiosRequestConfig): Promise<AxiosResponse> => {
 	try {
 		return await axios.request(body);
 	} catch (err: any) {
