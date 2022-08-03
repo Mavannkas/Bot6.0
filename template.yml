@@ -160,7 +160,6 @@ Resources:
           Name: email
         - AttributeDataType: String
           Name: userID
-          Mutable: true
       LambdaConfig:
         PreSignUp: !GetAtt PreSignUpLambda.Arn
       EmailConfiguration:
