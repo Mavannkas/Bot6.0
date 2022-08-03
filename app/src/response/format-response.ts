@@ -16,7 +16,7 @@ export class FormatResponse {
 
 	code(statusCode: number): FormatResponse {
 		if (statusCode < 100 || statusCode > 599) {
-			throw new InvalidParameterError('Status code must be between 100 and 599');
+			throw new InvalidParameterError(400, 'Status code must be between 100 and 599');
 		}
 
 		this.statusCode = statusCode;

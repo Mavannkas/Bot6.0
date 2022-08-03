@@ -1,4 +1,7 @@
-import { APIGatewayEvent, APIGatewayProxyResult, Context } from 'aws-lambda';
+import { APIGatewayEvent, APIGatewayProxyResult, Callback, Context, PreSignUpTriggerEvent } from 'aws-lambda';
 import { Deps } from './deps';
 
-export type Handler = (deps: Deps) => (event: APIGatewayEvent) => Promise<APIGatewayProxyResult>;
+export type LambdaEvent = APIGatewayEvent | PreSignUpTriggerEvent;
+export type LambdaResult = Promise<APIGatewayProxyResult | unknown>;
+
+export type Handler = (deps: Deps) => (event: LambdaEvent, context?: Context, callback?: Callback<any>) => LambdaResult;

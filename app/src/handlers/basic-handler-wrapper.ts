@@ -1,14 +1,14 @@
-import { APIGatewayEvent, APIGatewayProxyResult } from 'aws-lambda';
-import { Handler } from '../interfaces/default-handler';
+import { APIGatewayEvent, APIGatewayProxyResult, Callback, Context, PreSignUpTriggerEvent } from 'aws-lambda';
+import { Handler, LambdaEvent, LambdaResult } from '../interfaces/default-handler';
 import { Deps } from '../interfaces/deps';
 import { FormatResponse } from '../response/format-response';
 
 export const basicHandler =
 	(deps: Deps) =>
 	(handler: Handler) =>
-	async (event: APIGatewayEvent): Promise<APIGatewayProxyResult> => {
+	async (event: LambdaEvent, context?: Context, callback?: Callback<any>): LambdaResult => {
 		try {
-			return await handler(deps)(event);
+			return await handler(deps)(event, context, callback);
 		} catch (err) {
 			return processError(err);
 		}

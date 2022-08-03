@@ -27,7 +27,6 @@ Globals:
     Environment:
       Variables:
         NODE_ENV: !Ref Stage
-        AWS_REGION: !Sub ${AWS::Region}
     Runtime: nodejs14.x
     CodeUri: app/dist/src
 
@@ -45,6 +44,17 @@ Resources:
             #   Header: token
             # AuthType: 'COGNITO_USER_POOLS'
         DefaultAuthorizer: MyCognitoAuthorizer
+
+  PreSignUpLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub 'awscodestar-${ProjectId}-lambda-presignup-trigger'
+      CodeUri: app/dist/src
+      Handler: handlers/other/pre-signup-trigger.handler
+      Role:
+        Fn::GetAtt:
+          - LambdaExecutionRole
+          - Arn
 
   HelloWorld:
     Type: AWS::Serverless::Function
@@ -150,6 +160,9 @@ Resources:
           Name: email
         - AttributeDataType: String
           Name: userID
+          Mutable: true
+      LambdaConfig:
+        PreSignUp: !GetAtt PreSignUpLambda.Arn
       EmailConfiguration:
         EmailSendingAccount: COGNITO_DEFAULT
 

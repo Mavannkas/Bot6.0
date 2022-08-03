@@ -19,7 +19,7 @@ export class SsmClient {
 	private async sendCommand(command: GetParameterCommand): Promise<string> {
 		try {
 			const commandOutput = await this.client.send(command);
-
+			console.log(commandOutput);
 			if (!commandOutput?.Parameter?.Value) {
 				throw new ReponseError(500, `Parameter ${command.input.Name} not found`);
 			}
