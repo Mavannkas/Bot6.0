@@ -136,6 +136,7 @@ Resources:
 
   CognitoUserPool:
     Type: AWS::Cognito::UserPool
+    DependsOn: PreSignUpLambda
     Properties:
       UserPoolName: !Sub 'CodeStar-${ProjectId}-UserPool${Stage}'
       EnabledMfas:
@@ -145,7 +146,6 @@ Resources:
         RecoveryMechanisms:
           - Name: verified_email
             Priority: 1
-
       Policies:
         PasswordPolicy:
           MinimumLength: 8
