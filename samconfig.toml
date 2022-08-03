@@ -1,0 +1,11 @@
+version = 0.1
+[default]
+[default.deploy]
+[default.deploy.parameters]
+stack_name = "sam-app"
+s3_bucket = "aws-sam-cli-managed-default-samclisourcebucket-1xlvk20o3e2iz"
+s3_prefix = "sam-app"
+region = "us-east-1"
+capabilities = "CAPABILITY_IAM"
+parameter_overrides = "ProjectId=\"bot6-1\" CodeDeployRole=\"arn:aws:iam::181296696753:role/CodeStarWorker-bot6-0-CodeDeploy\" Stage=\"develop\""
+image_repositories = []
