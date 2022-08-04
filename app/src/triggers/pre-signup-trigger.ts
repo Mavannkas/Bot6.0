@@ -13,7 +13,6 @@ type LinkUsersParams = {
 
 const knownProviderNames: Record<string, string> = {
 	google: 'Google',
-	facebook: 'Facebook',
 };
 
 const getProviderName = async (userPoolId: string, providerName: string, cognito: CognitoIdentityServiceProvider) => {

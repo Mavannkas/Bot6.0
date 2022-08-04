@@ -232,6 +232,11 @@ Resources:
             Action:
               - ssm:GetParameter
             Resource: !Sub arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/cognito/${ProjectId}${Stage}/client/*
+          - Effect: Allow
+            Action:
+              - cognito-idp:ListUsers
+              - cognito-idp:listIdentityProviders
+            Resource: !Ref CognitoUserPool
 
   CognitoUserPoolAccessToTrigger:
     Type: AWS::Lambda::Permission
@@ -239,7 +244,7 @@ Resources:
       FunctionName: !GetAtt PreSignUpLambda.Arn
       Action: lambda:InvokeFunction
       Principal: 'cognito-idp.amazonaws.com'
-      SourceArn: !GetAtt CognitoUserPool.Arn
+      SourceArn: !Ref CognitoUserPool
       SourceAccount: !Sub ${AWS::AccountId}
 
   DependencyLayer:
