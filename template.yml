@@ -142,6 +142,8 @@ Resources:
       EnabledMfas:
         - SOFTWARE_TOKEN_MFA
       MfaConfiguration: OPTIONAL
+      AutoVerifiedAttributes:
+        - email
       AccountRecoverySetting:
         RecoveryMechanisms:
           - Name: verified_email
@@ -160,8 +162,11 @@ Resources:
           Name: email
         - AttributeDataType: String
           Name: userID
-      # LambdaConfig:
-      #   PreSignUp: !GetAtt PreSignUpLambda.Arn
+      UserAttributeUpdateSettings:
+        AttributesRequireVerificationBeforeUpdate:
+          - email
+      LambdaConfig:
+        PreSignUp: !GetAtt PreSignUpLambda.Arn
       EmailConfiguration:
         EmailSendingAccount: COGNITO_DEFAULT
 
