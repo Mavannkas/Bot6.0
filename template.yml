@@ -136,7 +136,6 @@ Resources:
 
   CognitoUserPool:
     Type: AWS::Cognito::UserPool
-    DependsOn: PreSignUpLambda
     Properties:
       UserPoolName: !Sub 'CodeStar-${ProjectId}-UserPool${Stage}'
       EnabledMfas:
@@ -236,7 +235,7 @@ Resources:
             Action:
               - cognito-idp:ListUsers
               - cognito-idp:listIdentityProviders
-            Resource: !Ref CognitoUserPool
+            Resource: !Sub arn:aws:cognito-idp:${AWS::Region}:${AWS::AccountId}:userpool/*
 
   CognitoUserPoolAccessToTrigger:
     Type: AWS::Lambda::Permission
