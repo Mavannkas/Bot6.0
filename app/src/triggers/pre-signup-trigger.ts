@@ -69,17 +69,18 @@ const mergeUsers = async (event: PreSignUpTriggerEvent, deps: TriggerDeps): Prom
 
 const linkUsers = async (cognito: CognitoIdentityServiceProvider, params: LinkUsersParams) => {
 	const { ProviderAttributeValue, ProviderName, UserAttributeValue, UserPoolId } = params;
+	console.log('Params', params);
 	await cognito
 		.adminLinkProviderForUser({
 			UserPoolId,
 			DestinationUser: {
 				ProviderName: 'Cognito',
-				ProviderAttributeValue,
+				ProviderAttributeValue: UserAttributeValue,
 			},
 			SourceUser: {
 				ProviderName,
 				ProviderAttributeName: 'Cognito_Subject',
-				ProviderAttributeValue: UserAttributeValue,
+				ProviderAttributeValue,
 			},
 		})
 		.promise();
