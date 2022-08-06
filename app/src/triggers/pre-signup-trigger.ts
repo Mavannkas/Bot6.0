@@ -88,7 +88,7 @@ const linkUsers = async (cognito: CognitoIdentityServiceProvider, params: LinkUs
 
 export const preSignUpTrigger: Handler =
 	(deps: Deps) =>
-	async (event, _, callback): Promise<unknown> => {
+	async (event, _, callback): Promise<void> => {
 		try {
 			const innerEvent = event as PreSignUpTriggerEvent;
 			console.log(JSON.stringify(innerEvent));
