@@ -5,10 +5,13 @@ import { FormatResponse } from '../response/format-response';
 
 export const basicHandler =
 	(deps: Deps) =>
-	(handler: Handler) =>
+	(handler: Handler, isAsync: boolean = false) =>
 	async (event: LambdaEvent, context?: Context, callback?: Callback<any>): LambdaResult => {
 		try {
-			return await handler(deps)(event, context, callback);
+			const result = handler(deps)(event, context, callback);
+			if (!isAsync) {
+				return result;
+			}
 		} catch (err) {
 			return processError(err);
 		}
