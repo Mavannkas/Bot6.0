@@ -85,20 +85,18 @@ const linkUsers = async (cognito: CognitoIdentityServiceProvider, params: LinkUs
 		})
 		.promise();
 };
-
+//TODO merge normal user to provider
 export const preSignUpTrigger: Handler =
 	(deps: Deps) =>
-	async (event, _, callback): Promise<unknown> => {
+	async (event): Promise<unknown> => {
 		try {
 			const innerEvent = event as PreSignUpTriggerEvent;
 			console.log(JSON.stringify(innerEvent));
 			const innerDeps = deps as TriggerDeps;
 			const result = await mergeUsers(innerEvent, innerDeps);
 			console.log('result', result);
-
-			return !result ? callback!(null, innerEvent) : callback!(null);
 		} catch (err) {
 			console.error(err);
-			callback!(err as Error);
+			return err;
 		}
 	};
