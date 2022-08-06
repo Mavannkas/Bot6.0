@@ -88,7 +88,7 @@ const linkUsers = async (cognito: CognitoIdentityServiceProvider, params: LinkUs
 
 export const preSignUpTrigger: Handler =
 	(deps: Deps) =>
-	async (event, _, callback): Promise<void> => {
+	async (event, _, callback): Promise<unknown> => {
 		try {
 			const innerEvent = event as PreSignUpTriggerEvent;
 			console.log(JSON.stringify(innerEvent));
@@ -96,7 +96,7 @@ export const preSignUpTrigger: Handler =
 			const result = await mergeUsers(innerEvent, innerDeps);
 			console.log('result', result);
 
-			callback!(null, innerEvent);
+			return !result ? callback!(null, innerEvent) : undefined;
 		} catch (err) {
 			console.error(err);
 			callback!(err as Error);
