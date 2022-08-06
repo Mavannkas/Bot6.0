@@ -159,8 +159,10 @@ Resources:
       Schema:
         - AttributeDataType: String
           Name: email
+          Mutable: true
         - AttributeDataType: String
           Name: userID
+          Mutable: true
       UserAttributeUpdateSettings:
         AttributesRequireVerificationBeforeUpdate:
           - email
