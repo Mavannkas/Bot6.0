@@ -47,8 +47,9 @@ const mergeUsers = async (event: PreSignUpTriggerEvent, deps: TriggerDeps): Prom
 			Limit: 1,
 		})
 		.promise();
-
+	console.log('Users', Users);
 	const providerName = await getProviderName(userPoolId, provider, cognito);
+	console.log('providerName', providerName);
 
 	if (!providerName || !Users?.length) {
 		return false;
@@ -87,8 +88,14 @@ const linkUsers = async (cognito: CognitoIdentityServiceProvider, params: LinkUs
 export const preSignUpTrigger: Handler =
 	(deps: Deps) =>
 	async (event, _, callback): Promise<unknown> => {
-		const innerEvent = event as PreSignUpTriggerEvent;
-		const innerDeps = deps as TriggerDeps;
-		const result = await mergeUsers(innerEvent, innerDeps);
-		return !result ? callback!(null, event) : undefined;
+		try {
+			const innerEvent = event as PreSignUpTriggerEvent;
+			console.log(JSON.stringify(innerEvent));
+			const innerDeps = deps as TriggerDeps;
+			const result = await mergeUsers(innerEvent, innerDeps);
+			return !result ? callback!(null, event) : undefined;
+		} catch (err) {
+			console.error(err);
+			return callback!(err as Error);
+		}
 	};
