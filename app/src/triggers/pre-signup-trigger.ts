@@ -96,7 +96,7 @@ export const preSignUpTrigger: Handler =
 			const result = await mergeUsers(innerEvent, innerDeps);
 			console.log('result', result);
 
-			return !result ? callback!(null, innerEvent) : undefined;
+			return !result ? callback!(null, innerEvent) : callback!(null);
 		} catch (err) {
 			console.error(err);
 			callback!(err as Error);
