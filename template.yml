@@ -280,6 +280,9 @@ Resources:
         - AttributeName: 'Email'
           KeyType: 'RANGE'
       TableName: !Sub 'CodeStar-${ProjectId}-UserProfiles${Stage}'
+      ProvisionedThroughput:
+        ReadCapacityUnits: 0
+        WriteCapacityUnits: 0
       GlobalSecondaryIndexes:
         - IndexName: 'ByEmail'
           KeySchema:
@@ -287,6 +290,9 @@ Resources:
               KeyType: 'HASH'
             - AttributeName: 'ID'
               KeyType: 'RANGE'
+          ProvisionedThroughput:
+            ReadCapacityUnits: 0
+            WriteCapacityUnits: 0
           Projection:
             NonKeyAttributes:
               - 'LicenseExpiry'
@@ -297,6 +303,9 @@ Resources:
               KeyType: 'HASH'
             - AttributeName: 'GeneratedKey'
               KeyType: 'RANGE'
+          ProvisionedThroughput:
+            ReadCapacityUnits: 0
+            WriteCapacityUnits: 0
           Projection:
             NonKeyAttributes:
               - 'KeyUses'
