@@ -292,7 +292,7 @@ Resources:
             NonKeyAttributes:
               - 'LicenseExpiry'
             ProjectionType: 'INCLUDE'
-        - IndexName: 'GeneratedKeyByEmail'
+        - IndexName: 'GeneratedKeyIndex'
           KeySchema:
             - AttributeName: 'GeneratedKey'
               KeyType: 'HASH'
