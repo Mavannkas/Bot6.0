@@ -262,7 +262,7 @@ Resources:
   CollisionsBucket:
     Type: AWS::S3::Bucket
     Properties:
-      BucketName: !Sub CodeStar-${ProjectId}-CollisionsBucket${Stage}
+      BucketName: !Sub code-star-${ProjectId}-collisions-bucket${Stage}
 
   UserProfilesDynamoDB:
     Type: AWS::DynamoDB::Table
