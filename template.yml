@@ -45,17 +45,6 @@ Resources:
             # AuthType: 'COGNITO_USER_POOLS'
         DefaultAuthorizer: MyCognitoAuthorizer
 
-  PreSignUpLambda:
-    Type: AWS::Serverless::Function
-    Properties:
-      FunctionName: !Sub 'awscodestar-${ProjectId}-lambda-presignup-trigger'
-      CodeUri: app/dist/src
-      Handler: handlers/other/pre-signup-trigger.handler
-      Role:
-        Fn::GetAtt:
-          - LambdaExecutionRole
-          - Arn
-
   HelloWorld:
     Type: AWS::Serverless::Function
     Properties:
@@ -133,6 +122,17 @@ Resources:
               Authorizer: NONE
             Method: get
             RestApiId: !Ref MainApi
+
+  PreSignUpLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub 'awscodestar-${ProjectId}-lambda-presignup-trigger'
+      CodeUri: app/dist/src
+      Handler: handlers/other/pre-signup-trigger.handler
+      Role:
+        Fn::GetAtt:
+          - LambdaExecutionRole
+          - Arn
 
   CognitoUserPool:
     Type: AWS::Cognito::UserPool
@@ -258,3 +258,47 @@ Resources:
       CompatibleRuntimes:
         - nodejs14.x
       RetentionPolicy: Delete
+
+  CollisionsBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub CodeStar-${ProjectId}-CollisionsBucket${Stage}
+
+  UserProfilesDynamoDB:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      AttributeDefinitions:
+        - AttributeName: 'ID'
+          AttributeType: 'S'
+        - AttributeName: 'Email'
+          AttributeType: 'S'
+        - AttributeName: 'GeneratedKey'
+          AttributeType: 'S'
+      KeySchema:
+        - AttributeName: 'ID'
+          KeyType: 'HASH'
+        - AttributeName: 'Email'
+          KeyType: 'RANGE'
+      TableName: !Sub 'CodeStar-${ProjectId}-UserProfiles${Stage}'
+      GlobalSecondaryIndexes:
+        - IndexName: 'ByEmail'
+          KeySchema:
+            - AttributeName: 'Email'
+              KeyType: 'HASH'
+            - AttributeName: 'ID'
+              KeyType: 'RANGE'
+          Projection:
+            NonKeyAttributes:
+              - 'LicenseExpiry'
+            ProjectionType: 'INCLUDE'
+        - IndexName: 'GeneratedKeyByEmail'
+          KeySchema:
+            - AttributeName: 'Email'
+              KeyType: 'HASH'
+            - AttributeName: 'GeneratedKey'
+              KeyType: 'RANGE'
+          Projection:
+            NonKeyAttributes:
+              - 'KeyUses'
+              - 'KeyExpiry'
+            ProjectionType: 'INCLUDE'
