@@ -275,31 +275,20 @@ Resources:
         - AttributeName: 'GeneratedKey'
           AttributeType: 'S'
       KeySchema:
-        - AttributeName: 'ID'
-          KeyType: 'HASH'
         - AttributeName: 'Email'
+          KeyType: 'HASH'
+        - AttributeName: 'ID'
           KeyType: 'RANGE'
       TableName: !Sub 'CodeStar-${ProjectId}-UserProfiles${Stage}'
       BillingMode: PAY_PER_REQUEST
       GlobalSecondaryIndexes:
         - IndexName: 'ByEmail'
           KeySchema:
-            - AttributeName: 'Email'
-              KeyType: 'HASH'
             - AttributeName: 'ID'
+              KeyType: 'HASH'
+            - AttributeName: 'Email'
               KeyType: 'RANGE'
           Projection:
             NonKeyAttributes:
               - 'LicenseExpiry'
-            ProjectionType: 'INCLUDE'
-        - IndexName: 'GeneratedKeyByEmail'
-          KeySchema:
-            - AttributeName: 'Email'
-              KeyType: 'HASH'
-            - AttributeName: 'GeneratedKey'
-              KeyType: 'RANGE'
-          Projection:
-            NonKeyAttributes:
-              - 'KeyUses'
-              - 'KeyExpiry'
             ProjectionType: 'INCLUDE'
