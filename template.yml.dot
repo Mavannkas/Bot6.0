@@ -1,0 +1,32 @@
+digraph "template" {
+MainApi [label="MainApi\n<AWS::Serverless::Api>"];
+HelloWorld [label="HelloWorld\n<AWS::Serverless::Function>"];
+GetAuthToken [label="GetAuthToken\n<AWS::Serverless::Function>"];
+RefreshToken [label="RefreshToken\n<AWS::Serverless::Function>"];
+PreSignUpLambda [label="PreSignUpLambda\n<AWS::Serverless::Function>"];
+CognitoUserPool [label="CognitoUserPool\n<AWS::Cognito::UserPool>"];
+CognitoUserPoolClient [label="CognitoUserPoolClient\n<AWS::Cognito::UserPoolClient>"];
+CognitoUserPoolClientIDParameter [label="CognitoUserPoolClientIDParameter\n<AWS::SSM::Parameter>"];
+CognitoUserPoolDomain [label="CognitoUserPoolDomain\n<AWS::Cognito::UserPoolDomain>"];
+LambdaExecutionRole [label="LambdaExecutionRole\n<AWS::IAM::Role>"];
+SSMParameterManagedPolicy [label="SSMParameterManagedPolicy\n<AWS::IAM::ManagedPolicy>"];
+CognitoUserPoolAccessToTrigger [label="CognitoUserPoolAccessToTrigger\n<AWS::Lambda::Permission>"];
+DependencyLayer [label="DependencyLayer\n<AWS::Serverless::LayerVersion>"];
+CollisionsBucket [label="CollisionsBucket\n<AWS::S3::Bucket>"];
+UserProfilesDynamoDB [label="UserProfilesDynamoDB\n<AWS::DynamoDB::Table>"];
+MainApi -> CognitoUserPool  [key=0, label=GetAtt];
+HelloWorld -> MainApi  [key=0, label=Ref];
+HelloWorld -> LambdaExecutionRole  [key=0, label=GetAtt];
+GetAuthToken -> MainApi  [key=0, label=Ref];
+GetAuthToken -> LambdaExecutionRole  [key=0, label=GetAtt];
+RefreshToken -> MainApi  [key=0, label=Ref];
+RefreshToken -> LambdaExecutionRole  [key=0, label=GetAtt];
+PreSignUpLambda -> LambdaExecutionRole  [key=0, label=GetAtt];
+CognitoUserPool -> PreSignUpLambda  [key=0, label=GetAtt];
+CognitoUserPoolClient -> CognitoUserPool  [key=0, label=Ref];
+CognitoUserPoolClientIDParameter -> CognitoUserPool  [key=0, label=Ref];
+CognitoUserPoolDomain -> CognitoUserPool  [key=0, label=Ref];
+LambdaExecutionRole -> SSMParameterManagedPolicy  [key=0, label=Ref];
+CognitoUserPoolAccessToTrigger -> PreSignUpLambda  [key=0, label=GetAtt];
+CognitoUserPoolAccessToTrigger -> CognitoUserPool  [key=0, label=GetAtt];
+}

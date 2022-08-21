@@ -1,9 +1,11 @@
 import {
 	DeleteItemCommand,
+	DeleteItemCommandOutput,
 	DynamoDBClient,
 	GetItemCommand,
 	QueryCommand,
 	UpdateItemCommand,
+	UpdateItemCommandOutput,
 } from '@aws-sdk/client-dynamodb';
 import {
 	UserByEmailParams,
@@ -13,6 +15,8 @@ import {
 	User,
 	ProjectionExpresionParams,
 } from './model/user';
+
+type SendCommandInput = DeleteItemCommand | UpdateItemCommand | GetItemCommand;
 
 export interface DatabaseClientConstructor {
 	new (client: DynamoDBClient, tableName: string, index?: string): DatabaseClientInterface;
@@ -49,7 +53,7 @@ export abstract class DatabaseClient implements DatabaseClientInterface {
 			ReturnValues: 'ALL_NEW',
 		});
 
-		const result = await this.client.send(command);
+		const result = await this.sendCommand<UpdateItemCommandOutput>(command);
 		return result.Attributes as unknown as User;
 	}
 
@@ -60,7 +64,12 @@ export abstract class DatabaseClient implements DatabaseClientInterface {
 			ReturnValues: 'ALL_OLD',
 		});
 
-		const result = await this.client.send(command);
+		const result = await this.sendCommand<DeleteItemCommandOutput>(command);
 		return result.Attributes as unknown as User;
+	}
+
+	protected async sendCommand<O>(command: SendCommandInput): Promise<O> {
+		const result = await this.client.send(command);
+		return result as unknown as O;
 	}
 }
