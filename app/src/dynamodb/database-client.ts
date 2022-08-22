@@ -1,4 +1,5 @@
 import {
+	AttributeValue,
 	DeleteItemCommand,
 	DeleteItemCommandOutput,
 	DynamoDBClient,
@@ -12,9 +13,10 @@ import {
 	UserByGeneratedKeyParams,
 	UserByIDParams,
 	UpdateUserParams,
-	User,
+	UserAttribute,
 	ProjectionExpresionParams,
 } from './model/user';
+import { UpdateParams } from './update-expression-builder';
 
 type SendCommandInput = DeleteItemCommand | UpdateItemCommand | GetItemCommand;
 
@@ -26,9 +28,9 @@ export interface DatabaseClientInterface {
 	get: (
 		params: UserByEmailParams | UserByIDParams | UserByGeneratedKeyParams,
 		projection: ProjectionExpresionParams
-	) => Promise<User>;
-	update: (params: UpdateUserParams) => Promise<User>;
-	delete: (params: UserByEmailParams | UserByIDParams | UserByGeneratedKeyParams) => Promise<User>;
+	) => Promise<UserAttribute>;
+	update: (email: string, params: UpdateParams) => Promise<UserAttribute>;
+	delete: (params: UserByEmailParams | UserByIDParams | UserByGeneratedKeyParams) => Promise<UserAttribute>;
 }
 
 export abstract class DatabaseClient implements DatabaseClientInterface {
@@ -37,35 +39,53 @@ export abstract class DatabaseClient implements DatabaseClientInterface {
 	abstract get: (
 		params: UserByEmailParams | UserByIDParams | UserByGeneratedKeyParams,
 		projection: ProjectionExpresionParams
-	) => Promise<User>;
+	) => Promise<UserAttribute>;
 
-	async update(params: UpdateUserParams): Promise<User> {
+	async update(email: string, params: UpdateParams): Promise<UserAttribute> {
 		const command = new UpdateItemCommand({
 			TableName: this.tableName,
 			Key: {
 				Email: {
-					S: params.Email,
+					S: email,
 				},
 			},
 			UpdateExpression: params.UpdateExpression,
-			ExpressionAttributeValues: params.ExpressionAttributeValues,
-			ExpressionAttributeNames: params.ExpressionAttributeNames,
+			ExpressionAttributeValues: params.ExpressionAttributeNames as Record<string, AttributeValue>,
+			ConditionExpression: params.ConditionExpression,
 			ReturnValues: 'ALL_NEW',
 		});
 
 		const result = await this.sendCommand<UpdateItemCommandOutput>(command);
-		return result.Attributes as unknown as User;
+		return result.Attributes as unknown as UserAttribute;
 	}
 
-	async delete(params: UserByEmailParams | UserByIDParams | UserByGeneratedKeyParams): Promise<User> {
+	async delete(params: UserByEmailParams | UserByIDParams | UserByGeneratedKeyParams): Promise<UserAttribute> {
+		const key: Record<string, AttributeValue> = {};
+		if ('Email' in params) {
+			key.Email = {
+				S: params.Email,
+			};
+		}
+		if ('ID' in params) {
+			key.ID = {
+				S: params.ID,
+			};
+		}
+
+		if ('GeneratedKey' in params && params.GeneratedKey) {
+			key.GeneratedKey = {
+				S: params.GeneratedKey,
+			};
+		}
+
 		const command = new DeleteItemCommand({
 			TableName: this.tableName,
-			Key: params,
+			Key: key,
 			ReturnValues: 'ALL_OLD',
 		});
 
 		const result = await this.sendCommand<DeleteItemCommandOutput>(command);
-		return result.Attributes as unknown as User;
+		return result.Attributes as unknown as UserAttribute;
 	}
 
 	protected async sendCommand<O>(command: SendCommandInput): Promise<O> {

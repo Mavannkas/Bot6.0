@@ -1,4 +1,5 @@
-import { User, UserI, UserType } from './model/user';
+import { AttributeValue, AttributeValueUpdate } from '@aws-sdk/client-dynamodb';
+import { UserAttribute, User, UserType } from './model/user';
 
 enum Expression {
 	SET = 'SET',
@@ -7,14 +8,14 @@ enum Expression {
 	DELETE = 'DELETE',
 }
 
-interface AttributeValue {
+interface AttributeValues {
 	type: UserType;
-	attribut: User;
-	value: Exclude<UserI[User], undefined>;
+	attribut: UserAttribute;
+	value: Exclude<User[UserAttribute], undefined>;
 }
 
-interface UpdateParams {
-	ExpressionAttributeNames: Record<string, Record<string, string>>;
+export interface UpdateParams {
+	ExpressionAttributeNames: Record<string, AttributeValue>;
 	UpdateExpression: string;
 	ConditionExpression?: string;
 }
@@ -27,29 +28,19 @@ class UpdateExpressionBuilder {
 		[Expression.DELETE]: [],
 	};
 	private expressionCount: number = 0;
-	private attributeValues: Record<string, AttributeValue> = {};
+	private attributeValues: Record<string, AttributeValues> = {};
 
 	static init(): UpdateExpressionBuilder {
 		return new UpdateExpressionBuilder();
 	}
 
-	set(attribut: User, value: UserI[User]): UpdateExpressionBuilder {
+	set(attribut: UserAttribute, value: User[UserAttribute]): UpdateExpressionBuilder {
 		this.addExpression(Expression.SET, attribut, value);
 		return this;
 	}
 
-	remove(attribut: User, value: UserI[User]): UpdateExpressionBuilder {
-		this.addExpression(Expression.REMOVE, attribut, value);
-		return this;
-	}
-
-	add(attribut: User, value: UserI[User]): UpdateExpressionBuilder {
-		this.addExpression(Expression.ADD, attribut, value);
-		return this;
-	}
-
-	delete(attribut: User, value: UserI[User]): UpdateExpressionBuilder {
-		this.addExpression(Expression.DELETE, attribut, value);
+	remove(attribut: UserAttribute): UpdateExpressionBuilder {
+		this.addExpression(Expression.REMOVE, attribut);
 		return this;
 	}
 
@@ -68,17 +59,19 @@ class UpdateExpressionBuilder {
 			.join(' ');
 	}
 
-	private buildExpressionAttributeNames(): Record<string, Record<string, string>> {
+	private buildExpressionAttributeNames(): Record<string, AttributeValue> {
 		return Object.entries(this.attributeValues).reduce((acc, [key, value]) => {
-			acc[key] = { [value.type]: value.attribut };
+			acc[key][value.type] = value.attribut;
 			return acc;
-		}, {} as Record<string, Record<string, string>>);
+		}, {} as Record<string, AttributeValue>);
 	}
 
-	private addExpression(expression: Expression, attribut: User, value: UserI[User]) {
+	private addExpression(expression: Expression, attribut: UserAttribute, value?: User[UserAttribute]) {
 		if (!value) {
+			this.updateExpressions[expression].push(`${attribut}`);
 			return;
 		}
+
 		const newKey = this.getNextKey();
 		this.updateExpressions[expression].push(`${attribut} = ${newKey}`);
 		this.attributeValues[newKey] = { type: UserType[attribut], attribut, value };

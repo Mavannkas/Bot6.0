@@ -1,4 +1,4 @@
-export enum User {
+export enum UserAttribute {
 	Email = 'Email',
 	ID = 'ID',
 	CreatedAt = 'CreatedAt',
@@ -18,20 +18,20 @@ export enum UserType {
 	LicenceExpiry = 'S',
 }
 
-export interface UserI {
-	[User.Email]: string;
-	[User.ID]: string;
-	[User.CreatedAt]: string;
-	[User.GeneratedKey]?: string;
-	[User.KeyUses]?: number;
-	[User.KeyExpiry]?: string;
-	[User.LicenceExpiry]?: string;
+export interface User {
+	[UserAttribute.Email]: string;
+	[UserAttribute.ID]: string;
+	[UserAttribute.CreatedAt]: string;
+	[UserAttribute.GeneratedKey]?: string;
+	[UserAttribute.KeyUses]?: number;
+	[UserAttribute.KeyExpiry]?: string;
+	[UserAttribute.LicenceExpiry]?: string;
 }
 
-export type UserByID = Pick<UserI, User.ID | User.Email | User.LicenceExpiry>;
-export type UserKey = Pick<UserI, User.GeneratedKey | User.KeyUses | User.KeyExpiry>;
-export type UserByEmailParams = Pick<UserI, User.Email>;
-export type UserByIDParams = Pick<UserI, User.ID>;
-export type UserByGeneratedKeyParams = Pick<UserI, User.GeneratedKey>;
-export type UpdateUserParams = Partial<UserI> & Pick<UserI, User.Email>;
-export type ProjectionExpresionParams = Array<keyof UserI>;
+export type UserByID = Pick<User, UserAttribute.ID | UserAttribute.Email | UserAttribute.LicenceExpiry>;
+export type UserKey = Pick<User, UserAttribute.GeneratedKey | UserAttribute.KeyUses | UserAttribute.KeyExpiry>;
+export type UserByEmailParams = Pick<User, UserAttribute.Email>;
+export type UserByIDParams = Pick<User, UserAttribute.ID>;
+export type UserByGeneratedKeyParams = Pick<User, UserAttribute.GeneratedKey>;
+export type UpdateUserParams = Partial<User> & Pick<User, UserAttribute.Email>;
+export type ProjectionExpresionParams = Array<keyof User>;
