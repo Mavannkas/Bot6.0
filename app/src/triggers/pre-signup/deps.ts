@@ -1,4 +1,4 @@
-import { Deps } from '../interfaces/deps';
+import { Deps } from '../../interfaces/deps';
 import { CognitoIdentityServiceProvider } from 'aws-sdk';
 
 export interface TriggerDeps extends Deps {

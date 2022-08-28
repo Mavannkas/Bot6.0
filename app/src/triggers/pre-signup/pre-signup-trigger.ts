@@ -1,6 +1,6 @@
 import { PreSignUpTriggerEvent } from 'aws-lambda';
-import { Handler } from '../interfaces/default-handler';
-import { Deps } from '../interfaces/deps';
+import { Handler } from '../../interfaces/default-handler';
+import { Deps } from '../../interfaces/deps';
 import { TriggerDeps } from './deps';
 import { CognitoIdentityServiceProvider } from 'aws-sdk';
 

@@ -61,11 +61,13 @@ export abstract class DatabaseClient implements DatabaseClientInterface {
 
 	async delete(params: UserByEmailParams | UserByIDParams | UserByGeneratedKeyParams): Promise<UserAttribute> {
 		const key: Record<string, AttributeValue> = {};
+
 		if ('Email' in params) {
 			key.Email = {
 				S: params.Email,
 			};
 		}
+
 		if ('ID' in params) {
 			key.ID = {
 				S: params.ID,
